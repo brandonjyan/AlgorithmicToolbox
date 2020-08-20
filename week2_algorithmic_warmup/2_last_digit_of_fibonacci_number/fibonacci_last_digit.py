@@ -16,7 +16,6 @@ def last_digit_of_fibonacci_number(n):
 
     first = 0
     second = 1
-
     for _ in range(n - 1):
         temp = first
         first = second % 10
