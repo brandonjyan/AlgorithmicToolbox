@@ -1,15 +1,29 @@
-# Uses python3
-import sys
+# python3
 
 def lcm_naive(a, b):
-    for l in range(1, a*b + 1):
-        if l % a == 0 and l % b == 0:
-            return l
+    assert 1 <= a <= 2 * 10 ** 9 and 1 <= b <= 2 * 10 ** 9
 
-    return a*b
+    multiple = max(a, b)
+    while multiple % a != 0 or multiple % b != 0:
+        multiple += 1
+
+    return multiple
+
+def lcm(a, b):
+    assert 1 <= a <= 2 * 10 ** 9 and 1 <= b <= 2 * 10 ** 9
+
+    return a * b // gcd(a, b)
+
+def gcd(a, b):
+    assert 0 <= a <= 2 * 10 ** 9 and 0 <= b <= 2 * 10 ** 9
+
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
 
 if __name__ == '__main__':
-    input = sys.stdin.read()
-    a, b = map(int, input.split())
-    print(lcm_naive(a, b))
-
+    input_a, input_b = map(int, input().split())
+    print(lcm(input_a, input_b))
+    
+    
