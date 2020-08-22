@@ -1,6 +1,5 @@
 # python3
 
-
 def compute_operations(n):
     assert 1 <= n <= 10 ** 6
     T = [0, 0] + [n] * (n-1)
