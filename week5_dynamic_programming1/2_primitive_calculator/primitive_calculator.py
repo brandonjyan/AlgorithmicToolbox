@@ -1,21 +1,35 @@
-# Uses python3
-import sys
+# python3
 
-def optimal_sequence(n):
-    sequence = []
-    while n >= 1:
-        sequence.append(n)
-        if n % 3 == 0:
-            n = n // 3
-        elif n % 2 == 0:
-            n = n // 2
+
+def compute_operations(n):
+    assert 1 <= n <= 10 ** 6
+    T = [0, 0] + [n] * (n-1)
+
+    for i in range(2, n + 1):
+        if T[i] > 1:
+            T[i] = min(T[i], T[i - 1] + 1)
+        if i % 2 == 0 and i / 2 >= 1:
+            T[i] = min(T[i], T[int(i / 2)] + 1)
+        if i % 3 == 0 and i / 3 >= 1:
+            T[i] = min(T[i], T[int(i / 3)] + 1)
+
+    result = [n] + [0] * T[n]
+
+    for i in range(1, len(result)):
+        if T[result[i - 1] - 1] == T[n] - i:
+            result[i] = result[i - 1] - 1
+        elif T[int(result[i - 1] / 2)] == T[n] - i:
+            result[i] = int(result[i - 1]/ 2)
         else:
-            n = n - 1
-    return reversed(sequence)
+            result[i] = int(result[i - 1] / 3)
 
-input = sys.stdin.read()
-n = int(input)
-sequence = list(optimal_sequence(n))
-print(len(sequence) - 1)
-for x in sequence:
-    print(x, end=' ')
+    return [ele for ele in reversed(result)]
+
+
+if __name__ == '__main__':
+    input_n = int(input())
+    output_sequence = compute_operations(input_n)
+    print(len(output_sequence) - 1)
+    print(*output_sequence)
+
+    
