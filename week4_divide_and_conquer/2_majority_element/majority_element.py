@@ -1,6 +1,5 @@
 # python3
 
-
 def majority_element_naive(elements):
     assert len(elements) <= 10 ** 5
     for e in elements:
