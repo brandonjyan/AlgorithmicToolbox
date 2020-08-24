@@ -1,18 +1,40 @@
-# Uses python3
-import sys
+# python3
 
-def get_number_of_inversions(a, b, left, right):
+from itertools import combinations
+
+def compute_inversions_naive(a):
     number_of_inversions = 0
-    if right - left <= 1:
-        return number_of_inversions
-    ave = (left + right) // 2
-    number_of_inversions += get_number_of_inversions(a, b, left, ave)
-    number_of_inversions += get_number_of_inversions(a, b, ave, right)
-    #write your code here
+    for i, j in combinations(range(len(a)), 2):
+        if a[i] > a[j]:
+            number_of_inversions += 1
     return number_of_inversions
 
+
+def compute_inversions(a):
+    if len(a) == 1:
+        return 0
+
+    mid = len(a) // 2
+    left_half, right_half = a[:mid], a[mid:]
+    count = compute_inversions(left_half) + compute_inversions(right_half)
+    left_half, right_half = sorted(a[:mid]), sorted(a[mid:])
+
+    i = j = 0
+    while i < len(left_half) and j < len(right_half):
+        if left_half[i] > right_half[j]:
+            count += len(left_half) - i
+            j += 1
+        else:
+            i += 1
+
+    return count
+
+
 if __name__ == '__main__':
-    input = sys.stdin.read()
-    n, *a = list(map(int, input.split()))
-    b = n * [0]
-    print(get_number_of_inversions(a, b, 0, len(a)))
+    input_n = int(input())
+    elements = list(map(int, input().split()))
+    assert len(elements) == input_n
+    print(compute_inversions(elements))
+
+    
+    
