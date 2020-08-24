@@ -1,36 +1,45 @@
-# Uses python3
-import sys
-import random
+# python3
 
-def partition3(a, l, r):
-    #write your code here
-    pass
+from random import randint
 
-def partition2(a, l, r):
-    x = a[l]
-    j = l
-    for i in range(l + 1, r + 1):
-        if a[i] <= x:
+def partition3(array, left, right):
+    x = array[left]
+    j = k = left
+
+    for i in range(left + 1, right + 1):
+        if array[i] == x:
             j += 1
-            a[i], a[j] = a[j], a[i]
-    a[l], a[j] = a[j], a[l]
-    return j
+            array[i], array[j] = array[j], array[i]
+        elif array[i] < x:
+            j += 1
+            k += 1
+            array[i], array[j] = array[j], array[i]
+            array[j], array[k] = array[k], array[j]
+
+    array[left], array[k] = array[k], array[left]
+
+    return [k, j]
 
 
-def randomized_quick_sort(a, l, r):
-    if l >= r:
+def randomized_quick_sort(array, left, right):
+    if left >= right:
         return
-    k = random.randint(l, r)
-    a[l], a[k] = a[k], a[l]
-    #use partition3
-    m = partition2(a, l, r)
-    randomized_quick_sort(a, l, m - 1);
-    randomized_quick_sort(a, m + 1, r);
+    k = randint(left, right)
+    array[left], array[k] = array[k], array[left]
+
+    #make a call to partition3 and then two recursive calls to randomized_quick_sort
+    partitions = partition3(array, left, right)
+
+    randomized_quick_sort(array, left, partitions[0] - 1)
+    randomized_quick_sort(array, partitions[1] + 1, right)
 
 
 if __name__ == '__main__':
-    input = sys.stdin.read()
-    n, *a = list(map(int, input.split()))
-    randomized_quick_sort(a, 0, n - 1)
-    for x in a:
-        print(x, end=' ')
+    input_n = int(input())
+    elements = list(map(int, input().split()))
+    assert len(elements) == input_n
+    randomized_quick_sort(elements, 0, len(elements) - 1)
+    print(*elements)
+
+    
+    
