@@ -20,3 +20,5 @@ if __name__ == '__main__':
     output_summands = compute_optimal_summands(input_n)
     print(len(output_summands))
     print(*output_summands)
+    
+    
