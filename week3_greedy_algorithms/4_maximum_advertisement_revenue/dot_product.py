@@ -1,19 +1,42 @@
-#Uses python3
+# python3
 
-import sys
+from itertools import permutations
 
-def max_dot_product(a, b):
-    #write your code here
-    res = 0
-    for i in range(len(a)):
-        res += a[i] * b[i]
-    return res
+
+def max_dot_product_naive(first_sequence, second_sequence):
+    assert len(first_sequence) == len(second_sequence)
+    assert len(first_sequence) <= 10 ** 3
+    assert all(0 <= f <= 10 ** 5 for f in first_sequence)
+    assert all(0 <= s <= 10 ** 5 for s in second_sequence)
+
+    max_product = 0
+    for permutation in permutations(second_sequence):
+        dot_product = sum(first_sequence[i] * permutation[i] for i in range(len(first_sequence)))
+        max_product = max(max_product, dot_product)
+
+    return max_product
+
+
+def max_dot_product(first_sequence, second_sequence):
+    assert len(first_sequence) == len(second_sequence)
+    assert len(first_sequence) <= 10 ** 3
+    assert all(0 <= f <= 10 ** 5 for f in first_sequence)
+    assert all(0 <= s <= 10 ** 5 for s in second_sequence)
+
+    first_sequence.sort()
+    second_sequence.sort()
+    sum = 0
+
+    for i in range(len(first_sequence)):
+        sum += first_sequence[i] * second_sequence[i]
+
+    return sum
+
+
 
 if __name__ == '__main__':
-    input = sys.stdin.read()
-    data = list(map(int, input.split()))
-    n = data[0]
-    a = data[1:(n + 1)]
-    b = data[(n + 1):]
-    print(max_dot_product(a, b))
-    
+    n = int(input())
+    prices = list(map(int, input().split()))
+    clicks = list(map(int, input().split()))
+    assert len(prices) == len(clicks) == n
+    print(max_dot_product(prices, clicks))
