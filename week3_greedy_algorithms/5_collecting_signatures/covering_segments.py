@@ -1,21 +1,32 @@
-# Uses python3
-import sys
+# python3
+
 from collections import namedtuple
+from sys import stdin
+from operator import attrgetter
 
 Segment = namedtuple('Segment', 'start end')
 
-def optimal_points(segments):
+
+def compute_optimal_points(segments):
     points = []
-    #write your code here
-    for s in segments:
-        points.append(s.start)
-        points.append(s.end)
+
+    segments.sort(key=attrgetter("end"))
+    max_right = segments[0].end
+    points.append(max_right)
+
+    i = 1
+    while i < len(segments):
+        if max_right < segments[i].start:
+            max_right = segments[i].end
+            points.append(max_right)
+        i += 1
+
     return points
 
 if __name__ == '__main__':
-    input = sys.stdin.read()
-    n, *data = map(int, input.split())
-    segments = list(map(lambda x: Segment(x[0], x[1]), zip(data[::2], data[1::2])))
-    points = optimal_points(segments)
-    print(len(points))
-    print(*points)
+    n, *data = map(int, stdin.read().split())
+    input_segments = list(map(lambda x: Segment(x[0], x[1]), zip(data[::2], data[1::2])))
+    assert n == len(input_segments)
+    output_points = compute_optimal_points(input_segments)
+    print(len(output_points))
+    print(*output_points)
